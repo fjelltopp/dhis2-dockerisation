@@ -1,10 +1,8 @@
 version: '2.1'
 services:
- database:
+ db:
    container_name: dhis2-db
-   build:
-     context: ./db
-     dockerfile: Dockerfile
+   image: mdillon/postgis:9.5
    environment:
      POSTGRES_USER: dhis2
      POSTGRES_DB: dhis2
@@ -15,6 +13,7 @@ services:
     - "5432:5432"
    volumes:
     - "./db/fgs_init.sql:/tmp/dhis_init.sql"
+    - "./db/init_script.sh:/docker-entrypoint-initdb.d/init_script.sh"
    healthcheck:
      test: ["CMD-SHELL", "pg_isready -h db -p 5432 -d dhis2"]
      interval: 30s
