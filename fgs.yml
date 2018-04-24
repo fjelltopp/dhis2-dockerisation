@@ -4,9 +4,11 @@ services:
    container_name: dhis2-db
    image: mdillon/postgis:9.5
    environment:
-     POSTGRES_USER: dhis2
-     POSTGRES_DB: dhis2
-     POSTGRES_PASSWORD: dhis2
+     POSTGRES_USER: postgres
+     POSTGRES_DB: postgres
+     DHIS2_PG_USER: dhis2
+     DHIS2_PG_DB: dhis2
+     DHIS2_PG_PASSWORD: dhis2
      POSTGRES_DB_TARGET: dhis-target
      PG_DATA: /var/lib/postgresql/data/pgdata:z
    ports:
