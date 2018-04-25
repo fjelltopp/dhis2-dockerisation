@@ -12,7 +12,8 @@ services:
    ports:
     - "5432:5432"
    volumes:
-    - "./db/fgs_init.sql:/docker-entrypoint-initdb.d/backup.sql"
+    - "./db/db-init.sql:/docker-entrypoint-initdb.d/1-db-init.sql"
+    - "./db/fgs_init.sql:/docker-entrypoint-initdb.d/2-backup.sql"
    healthcheck:
      test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis2"]
      interval: 30s
