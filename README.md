@@ -11,6 +11,8 @@ This Docker setup requires the installation of following requirements:
 
 ### Generating PostgreSQL database dumps
 
+Instructions to generate SQL dumps from PostgreSQL 9.5 can be found here: https://www.postgresql.org/docs/9.5/static/backup-dump.html
+
 ### Configuring database container
  In the `docker-compose-<deployment>.yml` file, the database configuration must be set to match the configurations in the database used to generate the SQL dump. Also the SQL dump needs to be mounted as a volume.
 1. Set the service image to match the correct PostgreSQL version. Note that the image is for PostgreSQL with PostGIS extension already installed:
