@@ -12,8 +12,8 @@ services:
    ports:
     - "5432:5432"
    volumes:
-    - "./puntland/db_init.sql:/docker-entrypoint-initdb.d/1-db-init.sql"
-    - "./puntland/db_backup.sql:/docker-entrypoint-initdb.d/2-backup.sql"
+    - "./puntland/db-init.sql:/docker-entrypoint-initdb.d/1-db-init.sql"
+    - "./puntland/db-backup.sql:/docker-entrypoint-initdb.d/2-backup.sql"
    healthcheck:
      test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d puntland"]
      interval: 30s
