@@ -1,5 +1,5 @@
 # dhis2-dockerisation
-Docker setup for starting DHIS2 based on a PostgreSQL SQL dump. Example configurations are presented in docker-compose files.
+Docker setup for starting DHIS2 based on a PostgreSQL SQL dump. Example configurations are presented in docker-compose files. Note that no SQL dumps are provided in the current version of the setup and must be provided from elsewhere.
 
 ## Requirements
 This Docker setup requires the installation of following requirements:
