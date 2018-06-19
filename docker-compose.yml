@@ -27,8 +27,6 @@ services:
    depends_on:
      database:
        condition: service_healthy
-   volumes:
-     - "./fgs/dhis.conf:/opt/dhis2/config/dhis.conf"
    healthcheck:
      test: "curl -f http://webapp:8080"
      interval: 30s
