@@ -3,7 +3,5 @@ services:
  webapp:
    ports:
      - "8080:8080"
-     - "443:8443"
    volumes:
-     - "/etc/letsencrypt/live/${HOSTNAME}:/etc/ssl"
      - "./tomcat/server.xml:/usr/local/tomcat/conf/server.xml"
