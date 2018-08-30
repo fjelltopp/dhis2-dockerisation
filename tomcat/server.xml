@@ -73,6 +73,7 @@
                redirectPort="8443"
                proxyPort="443"
                scheme="https"
+               relaxedQueryChars='[]'
     />
     <!-- A "Connector" using the shared thread pool-->
     <!--
