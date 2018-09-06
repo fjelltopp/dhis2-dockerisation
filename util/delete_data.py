@@ -5,8 +5,11 @@ from requests.auth import HTTPBasicAuth
 
 dhis2_url = 'https://dhis2.emro.info'
 
-username = 'senyoni'
-password = 'fpSI@#B*OT38k58m5umW'
+with open('secret') as f:
+    lines = f.readlines()
+username = lines[0].rstrip('\n')
+password = lines[1].rstrip('\n')
+
 auth = HTTPBasicAuth(username=username, password=password)
 
 # get the data set Id
@@ -40,3 +43,9 @@ r_de = requests.get(get_data_value_url, auth=auth)
 
 pprint(dataSetId)
 pprint(json.loads(r.text))
+
+"""
+TODO: 
+TODO: Get data elements
+TODO: Get data values
+"""
