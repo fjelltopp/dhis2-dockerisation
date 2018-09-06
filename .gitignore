@@ -1,2 +1,5 @@
 */db-backup.sql
 */secret
+*/.idea
+/.idea
+*/local-setup.sql
