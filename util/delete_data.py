@@ -23,14 +23,12 @@ def get_pages(url, auth, data_object):
 
 
 def delete_data_sets(dhis2_url, prefix):
-    # dhis2_url = 'https://dhis2.emro.info'
 
     with open('secret') as f:
         lines = f.readlines()
     username = lines[0].rstrip('\n')
     password = lines[1].rstrip('\n')
 
-    # prefix = 'HOQM'
 
     auth = HTTPBasicAuth(username=username, password=password)
 
@@ -128,22 +126,20 @@ def delete_event_trackers(dhis2_url, prefix):
 
                 delete_event_url = '{}/api/27/events/{}'.format(dhis2_url, event_id)
 
-                ret_delete = requests.delete(delete_event_url, auth=auth)
+                #ret_delete = requests.delete(delete_event_url, auth=auth)
 
         get_program_stages_url = '{}/api/27/programStages?filter=program.id:eq:{}'.format(dhis2_url, program['id'])
         program_stages = get_pages(get_program_stages_url, auth, 'programStages')
 
+        # get data elements from program stage
         data_elements = []
-
         for program_stage in program_stages:
             get_program_stage_details_url = '{}/api/27/programStages/{}'.format(dhis2_url, program_stage['id'])
             program_stage_details = requests.get(get_program_stage_details_url, auth=auth)
             program_stage_dict = json.loads(program_stage_details.text)
             data_elements = data_elements + program_stage_dict['programStageDataElements']
 
-        get_data_elements_url = '{}/api/27/dataElements?program={}'.format(dhis2_url, program['id'])
-
-        for data_element in program_stage_dict['programStageDataElements']:
+        for data_element in data_elements:
             delete_data_element_url = '{}/api/27/dataElements/{}'.format(dhis2_url, data_element['dataElement']['id'])
             ret_delete = requests.delete(delete_data_element_url, auth=auth)
 
@@ -153,8 +149,6 @@ def delete_event_trackers(dhis2_url, prefix):
 
         delete_program_url = '{}/api/27/programs/{}'.format(dhis2_url, program['id'])
         ret_delete = requests.delete(delete_program_url, auth=auth)
-
-    return True
 
 
 dhis2_url = 'https://dhis2.emro.info'
