@@ -84,7 +84,7 @@ def delete_organisational_unit(dhis2_url, ou_to_delete):
         ret_delete = requests.delete(delete_organisational_unit_url, auth=auth)
 
 
-dhis2_url = 'https://dhis2.emro.info'
-ou_to_delete = 'Burtinle District Hospital'
+dhis2_url = 'https://example.info'
+ou_to_delete = 'displayName of OU'
 
 delete_organisational_unit(dhis2_url, ou_to_delete)

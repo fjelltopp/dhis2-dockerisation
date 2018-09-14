@@ -29,7 +29,6 @@ def delete_data_sets(dhis2_url, prefix):
     username = lines[0].rstrip('\n')
     password = lines[1].rstrip('\n')
 
-
     auth = HTTPBasicAuth(username=username, password=password)
 
     # get the data set Ids
@@ -151,7 +150,7 @@ def delete_event_trackers(dhis2_url, prefix):
         ret_delete = requests.delete(delete_program_url, auth=auth)
 
 
-dhis2_url = 'https://dhis2.emro.info'
-prefix = 'HOQM'
+dhis2_url = 'https://example.info'
+prefix = 'DELETE ME'
 
 delete_event_trackers(dhis2_url, prefix)
