@@ -1,35 +1,14 @@
 
 import requests
 import json
-from requests.auth import HTTPBasicAuth
+import argparse
 import datetime
-
-
-def get_pages(url, auth, data_object):
-    ret = requests.get(url, auth=auth)
-    ret_dict = json.loads(ret.text)
-    collated = []
-    if 'pager' in ret_dict.keys():
-        while int(ret_dict['pager']['page']) < int(ret_dict['pager']['pageCount']):
-            collated = collated + ret_dict[data_object]
-            next_page = int(ret_dict['pager']['page']) + 1
-            ret = requests.get(url + '&page=' + str(next_page), auth=auth)
-            ret_dict = json.loads(ret.text)
-
-        collated = collated + ret_dict[data_object]
-        return collated
-    else:
-        return ret_dict
+from util import get_pages, get_auth
 
 
 def delete_organisational_unit(dhis2_url, ou_to_delete):
 
-    with open('secret') as f:
-        lines = f.readlines()
-    username = lines[0].rstrip('\n')
-    password = lines[1].rstrip('\n')
-
-    auth = HTTPBasicAuth(username=username, password=password)
+    auth = get_auth('secret')
 
     # get the data set Ids
     get_data_set_url = '{}/api/27/dataSets'.format(dhis2_url)
@@ -48,6 +27,8 @@ def delete_organisational_unit(dhis2_url, ou_to_delete):
     today_str = today.strftime('%Y-%m-%d')
 
     for organisation_unit in organisation_units:
+        print('Organisation unit id: {}'.format(organisation_unit['id']))
+
         for data_set in r_dict['dataSets']:
 
 
@@ -75,16 +56,10 @@ def delete_organisational_unit(dhis2_url, ou_to_delete):
                         cat=data_point['categoryOptionCombo'])
                 ret_delete = requests.delete(delete_data_value_url, auth=auth)
 
-        # get_audit_url = '{}/api/27/audits/dataValue?ou=iPjpfPR1Ptd' \
-        #     .format(dhis2_url, organisation_unit['id'])
-        # ret_delete = requests.delete(get_audit_url, auth=auth)
 
-        # delete organisational units
-        delete_organisational_unit_url = '{}/api/27/organisationUnits/{}'.format(dhis2_url, organisation_unit['id'])
-        ret_delete = requests.delete(delete_organisational_unit_url, auth=auth)
-
-
-dhis2_url = 'https://example.info'
-ou_to_delete = 'displayName of OU'
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Delete organisational unit from DHIS2 instance')
+dhis2_url = 'ENTER DHIS2 BASE URL'
+ou_to_delete = 'ENTER ORGANISATION UNIT DISPLAY NAME'
 
 delete_organisational_unit(dhis2_url, ou_to_delete)

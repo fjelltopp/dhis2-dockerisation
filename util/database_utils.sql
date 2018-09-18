@@ -15,11 +15,11 @@ select *
 from datavalueaudit da
 join organisationunit ou
  on da.organisationunitid=ou.organisationunitid
-where ou.uid='iPjpfPR1Ptd';
+where ou.uid='ENTER UID';
 
 -- delete all data value audits for organisation id
 delete
 from datavalueaudit da
 using organisationunit ou
  where da.organisationunitid=ou.organisationunitid
- and ou.uid='iPjpfPR1Ptd';
+ and ou.uid='ENTER UID';
