@@ -15,7 +15,7 @@ services:
     - "./somaliland/db-init.sql:/docker-entrypoint-initdb.d/1-init.sql"
     - "./somaliland/db-backup.sql:/docker-entrypoint-initdb.d/2-backup.sql"
    healthcheck:
-     test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis2"]
+     test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis"]
      interval: 30s
      timeout: 30s
      retries: 150
@@ -31,7 +31,7 @@ services:
      database:
        condition: service_healthy
    volumes:
-     - "./fgs/dhis.conf:/opt/dhis2/config/dhis.conf"
+     - "./somaliland/dhis.conf:/opt/dhis2/config/dhis.conf"
    healthcheck:
      test: "curl -f http://webapp:8080"
      interval: 30s
