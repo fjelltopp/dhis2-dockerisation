@@ -41,3 +41,28 @@ Instructions to generate SQL dumps from PostgreSQL 9.5 can be found here: https:
 Launch the services by calling docker-compose:
 `docker-compose -f docker-compose-<deployment>.yml up -d`
 The DHIS2 service is accessible in `localhost:8085` unless another port was mapped in the Docker Compose file.
+
+## Utility scripts
+
+### Removing organisation unit from a DHIS2 instance
+
+Instructions to remove an organisation unit from a DHIS2 instance
+
+#### Removing leaf organisation units
+
+Repeat the following steps for all leaf organisation units
+1. In the DHIS2 UI in Organisation Units, remove all data sets from the organisation unit
+2. Configure and run script `util/delete_organisational_unit.py` to soft delete all data values from the unit
+3. `util/delete_organisational_unit.py` print the `uid` of the organisational unit. You can also get this from the web API
+4. Use the DHIS2 UI in Data Administration -> Maintenance to permanently delete soft deleted data values
+5. Configure the SQL delete statement "delete all data value audits for organisation id" in `util/database_utils.sql` to use the
+`uid` of the organisation unit. Run the data value audit deletion statement in the backend database.
+6. Using the DHIS2 UI in Organisation Units, delete the organisation unit
+
+####  Removing non-leaf organisation units
+
+1. Remove all organisation units further down in the organisation hierarchy using the instructions above
+2. Use the Web API `<dhis_api_url>/organisationUnits/<uid>` to get the full object description of the organisation unit to be removed
+3. Edit the JSON object destription to replace the following array values with empty values: `organisationUnits` and `dataViewOrganisationUnits`
+4. Use the same Web API `<dhis_api_url>/organisationUnits/<uid>` to `PUT` the edited JSON payload to update the user
+5. Use the DHIS2 UI in Organisation Units to remove the organisation unit now that all references have been removed
