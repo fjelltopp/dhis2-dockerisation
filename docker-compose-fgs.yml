@@ -14,6 +14,7 @@ services:
    volumes:
     - "./fgs/db-init.sql:/docker-entrypoint-initdb.d/1-init.sql"
     - "./fgs/db-backup.sql:/docker-entrypoint-initdb.d/2-backup.sql"
+    - "./fgs/db-local-setup.sql:/docker-entrypoint-initdb.d/3-local-setup.sql"
    healthcheck:
      test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis2"]
      interval: 30s
