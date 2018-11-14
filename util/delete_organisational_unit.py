@@ -26,6 +26,9 @@ def delete_organisational_unit(dhis2_url, ou_to_delete):
     period_start_str = period_start.strftime('%Y-%m-%d')
     today_str = today.strftime('%Y-%m-%d')
 
+    if len(organisation_units) > 1:
+        return
+
     for organisation_unit in organisation_units:
         print('Organisation unit id: {}'.format(organisation_unit['id']))
 
@@ -59,7 +62,7 @@ def delete_organisational_unit(dhis2_url, ou_to_delete):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Delete organisational unit from DHIS2 instance')
-dhis2_url = 'ENTER DHIS2 BASE URL'
-ou_to_delete = 'ENTER ORGANISATION UNIT DISPLAY NAME'
+dhis2_url = 'https://dhis2.emro.info'
+ou_to_delete = 'Gambool HC'
 
 delete_organisational_unit(dhis2_url, ou_to_delete)
