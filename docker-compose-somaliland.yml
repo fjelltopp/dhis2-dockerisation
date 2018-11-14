@@ -4,19 +4,19 @@ services:
    container_name: dhis2-database
    image: mdillon/postgis:9.5
    environment:
-     POSTGRES_USER: dhis2
-     POSTGRES_DB: dhis2
-     POSTGRES_PASSWORD: dhis2
+     POSTGRES_USER: dhis
+     POSTGRES_DB: dhis
+     POSTGRES_PASSWORD: dhis
      POSTGRES_DB_TARGET: dhis-target
      PG_DATA: /var/lib/postgresql/data/pgdata:z
    ports:
     - "5432:5432"
    volumes:
-    - "./fgs/db-init.sql:/docker-entrypoint-initdb.d/1-init.sql"
-    - "./fgs/db-backup.sql:/docker-entrypoint-initdb.d/2-backup.sql"
-    - "./fgs/db-local-setup.sql:/docker-entrypoint-initdb.d/3-local-setup.sql"
+    - "./somaliland/db-init.sql:/docker-entrypoint-initdb.d/1-init.sql"
+    - "./somaliland/db-backup.sql:/docker-entrypoint-initdb.d/2-backup.sql"
+    - "./somaliland/db-local-setup.sql:/docker-entrypoint-initdb.d/3-local-setup.sql"
    healthcheck:
-     test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis2"]
+     test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis"]
      interval: 30s
      timeout: 30s
      retries: 150
@@ -32,7 +32,7 @@ services:
      database:
        condition: service_healthy
    volumes:
-     - "./fgs/dhis.conf:/opt/dhis2/config/dhis.conf"
+     - "./somaliland/dhis.conf:/opt/dhis2/config/dhis.conf"
    healthcheck:
      test: "curl -f http://webapp:8080"
      interval: 30s
