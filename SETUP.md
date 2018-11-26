@@ -1,9 +1,11 @@
 1. Install docker for ubuntu. E.g.:
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 1. Install docker compose:
 https://docs.docker.com/compose/install/#install-compose
 1. Setup ssl certs with letsencrypt and nginx reverse proxy
-https://certbot.eff.org/lets-encrypt/ubuntuxenial-nginx
+- https://certbot.eff.org/docs/install.html
+- Install `sudo apt-get install python-certbot-nginx` as it's not in certbot-auto manual.
+- `certbot-auto --nginx` and proceed with the wizard.
 1. Update `/etc/nginx/sites-avaiable/default`
 ```
 server {
@@ -30,11 +32,35 @@ server {
 ```
 1. Clone this repo:
 `git clone https://github.com/fjelltopp/dhis2-dockerisation`
+1. \[Optional\] update sql backup files to latest by overwriting `dhis2-dockerisation/country/db-backup.sql`.
 1. start it with
 ```
 docker-compose -f docker-compose-country.yml -f docker-compose-ssl.yml up -d
 ```
 
+1. Useful configuration:
+- enable automatic restart on reboot by adding the following to crontab:
+ ```
+ # at default user crontab, here ubuntu
+@reboot sleep 60 && /usr/local/bin/docker-compose -f /home/ubuntu/dhis2-dockerisation/docker-compose-country.yml up -d
+
+ ```
+ The 60 s sleep waits for docker deamon to initialise.
+ - automatic ssl cert renewal:
+ ```
+ # to root crontab
+ 1 1 * * *  /usr/local/sbin/certbot-auto renew >> /var/log/letsencrypt/certbot_renew.log 2>&1
+
+ ```
+The logs should already by rotated by existing certbot config. But double check the content of the following file:
+```
+root@puntland-training-hmis:/home/ubuntu# cat /etc/logrotate.d/certbot
+/var/log/letsencrypt/*.log {
+    rotate 12
+    weekly
+    compress
+    missingok
+```
 
 Extra:
 
