@@ -1,3 +1,4 @@
-#!/usr/bin/env bash -e
-scp -i ${RSA_KEY_PATH} db_backup.sql ${DESTINATION_HOST}:db_backup.sql
-rm db_backup.sql
+#!/usr/bin/env bash
+set -e
+scp db-backup.sql training:db-backup.sql
+rm db-backup.sql
