@@ -64,36 +64,40 @@ https://docs.docker.com/compose/install/#install-compose
             missingok
         ```
 
-#### Training instance data synchronisation
+## Training instance data synchronisation
 Let's configure the training instance to be reset to production data on weekly basis. The setup has two parts; at production server and training server.
-##### Production
+### Production
 1. Generate rsa keypair \[set `-C` to a meaningful name\]
     ```
     ssh-keygen -t rsa -b 4096 -C "country-production"
     ```
-    It's recomended to leave default settings and save private key as default in `~/.ssh/id_rsa`.
-2. Add host named training in `~/.ssh/config` \[set `HostName`\]
+    It's recomended to leave default settings and save private key as default in `~/.ssh/id_rsa`. Also set no passphrase for the key.
+1. Upload the public rsa key to the **training** instance `~/.ssh/authorized_keys`
+1. Add host named training in `~/.ssh/config` \[set `HostName`\]
     ```
     Host training
     HostName training.instance.hostname.net
     User ubuntu
     ServerAliveInterval 10
     ```
-3. Make the backup script executable
+1. Test the connection with
+    ```
+    ssh training
+    ```
+1. Make the backup script executable
     ```
     chmod a+x ~/dhis2-dockerisation/util/create_and_send_backup.sh
     ```
-4. Add the following entry in crontab
+1. Add the following entry in crontab
     ```
     10 1 * * 5 /bin/bash -c /home/ubuntu/dhis2-dockerisation/util/create_and_send_backup.sh
     ```
-##### Training
-1. Add production rsa public key to `~/.ssh/authorized_keys`
-2. Make the backup restore script executable
+### Training
+1. Make the backup restore script executable
     ```
-    chmod a+x ~/dhis2-dockerisation/util/receive_backup.sh
+    chmod a+x ~/dhis2-dockerisation/util/receive_db_backup.sh
     ```
-3. Add the following entry in crontab. Make sure it happens after the production backup is made and copied. \[set `COUNTRY` accordingly\]
+1. Add the following entry in crontab. Make sure it happens after the production backup is made and copied. \[set `COUNTRY` accordingly\]
     ```
     30 2 * * 5 COUNTRY=country /bin/bash -c /home/ubuntu/dhis2-dockerisation/util/receive_db_backup.sh
     ```
