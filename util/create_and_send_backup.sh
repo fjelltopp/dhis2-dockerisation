@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
 set -e
-source create_db_backup.sh
-source send_db_backup.sh
+SCRIPT=`realpath -s $0`
+SCRIPTPATH=`dirname $SCRIPT`
+source ${SCRIPTPATH}/create_db_backup.sh
+source ${SCRIPTPATH}/send_db_backup.sh
