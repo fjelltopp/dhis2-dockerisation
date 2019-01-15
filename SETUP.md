@@ -8,27 +8,65 @@ https://docs.docker.com/compose/install/#install-compose
     - `certbot-auto --nginx` and proceed with the wizard.
 1. Update `/etc/nginx/sites-avaiable/default`
     ```
+    # Default server configuration
+    #
     server {
-        listen 80;
-        listen [::]:80;
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-        server_name dhis2-fgs-demo.fjelltopp.org; # managed by Certbot
+        root /var/www/html;
+
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
 
         location / {
+            # First attempt to serve request as file, then
+            # as directory, then fall back to displaying a 404.
+            try_files $uri $uri/ =404;
+        }
+    }
+
+
+    server {
+        root /var/www/html;
+
+        index index.html index.htm index.nginx-debian.html;
+        server_name training.hmissomalia.net www.training.hmissomalia.net; # managed by Certbot
+
+
+            location / {
             #dhis2 tomcat reverse proxy setup
             proxy_set_header X-Real-IP  $remote_addr;
             proxy_set_header X-Forwarded-For $remote_addr;
             proxy_set_header Host $host;
             proxy_pass http://127.0.0.1:8080;
-        }
+            }
 
         listen [::]:443 ssl ipv6only=on; # managed by Certbot
         listen 443 ssl; # managed by Certbot
-        ssl_certificate /etc/letsencrypt/live/dhis2-fgs-demo.fjelltopp.org/fullchain.pem; # managed by Certbot
-        ssl_certificate_key /etc/letsencrypt/live/dhis2-fgs-demo.fjelltopp.org/privkey.pem; # managed by Certbot
+        ssl_certificate /etc/letsencrypt/live/training.hmissomalia.net/fullchain.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/training.hmissomalia.net/privkey.pem; # managed by Certbot
+        include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+        ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
     }
+    server {
+        if ($host = training.hmissomalia.net) {
+            return 301 https://$host$request_uri;
+        } # managed by Certbot
+        if ($host = www.training.hmissomalia.net) {
+            return 301 https://$host$request_uri;
+        } # managed by Certbot
 
+
+        listen 80 ;
+        listen [::]:80 ;
+        server_name training.hmissomalia.net www.training.hmissomalia.net;
+        return 404; # managed by Certbot
+
+
+    }
     ```
 1. Clone this repo:
     ```
